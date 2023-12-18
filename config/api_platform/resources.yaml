@@ -1,0 +1,45 @@
+resources:
+  App\CompanySubdomain\SomeModule\Domain\Entity\Test:
+    operations:
+
+      getPasswords:
+        class: ApiPlatform\Metadata\Post
+        uriTemplate: /get-password-list
+        controller: App\Controller\GetPasswordsController
+        openapiContext:
+          summary: 'Returns passwords for user'
+        security: 'is_granted("ROLE_USER")'
+
+      createPassword:
+        class: ApiPlatform\Metadata\Post
+        uriTemplate: /create-password
+        controller: App\Controller\CreatePasswordController
+        security: 'is_granted("ROLE_USER")'
+        openapiContext:
+          summary: 'Creates password'
+          requestBody:
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    name: { type: string }
+                    algorithm: { type: string }
+                    length: { type: integer }
+                    includeUppercase: { type: boolean }
+                    includeLowercase: { type: boolean }
+                    includeNumbers: { type: boolean }
+                    includeSpecialChars: { type: boolean }
+                example:
+                  name: 'my_pass'
+                  algorithm: 'random'
+                  length: 10
+                  includeUppercase: true
+                  includeLowercase: true
+                  includeNumbers: true
+                  includeSpecialChars: false
+
+
+
+
+

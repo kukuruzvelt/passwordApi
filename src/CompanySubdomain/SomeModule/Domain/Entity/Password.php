@@ -13,31 +13,34 @@ use Doctrine\ORM\Mapping as ORM;
 #[ApiResource]
 #[ORM\Entity]
 #[Post]
-#[Patch]
 #[Delete]
-#[Get]
-#[GetCollection(paginationClientItemsPerPage: true)]
+#[GetCollection]
 class Password
 {
     public function __construct(
         string $id,
         string $name,
-        string $passwordValue
+        string $passwordValue,
+        string $userId
     ) {
         $this->id = $id;
         $this->name = $name;
         $this->passwordValue = $passwordValue;
+        $this->userId = $userId;
     }
 
     #[ORM\Id]
     #[ORM\Column]
     private string $id;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 255, unique: true)]
     private string $name;
 
     #[ORM\Column(type: 'string', length: 255)]
     private string $passwordValue;
+
+    #[ORM\Column(type: 'string', length: 255)]
+    private string $userId;
 
     public function getId(): string
     {
@@ -57,6 +60,22 @@ class Password
     public function setName(string $name): void
     {
         $this->name = $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUserId(): string
+    {
+        return $this->userId;
+    }
+
+    /**
+     * @param string $userId
+     */
+    public function setUserId(string $userId): void
+    {
+        $this->userId = $userId;
     }
 
     public function getPasswordValue(): string
