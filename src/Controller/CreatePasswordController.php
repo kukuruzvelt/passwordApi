@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\CompanySubdomain\SomeModule\Domain\Entity\Password;
+use App\CompanySubdomain\SomeModule\Infrastructure\Exceptions\DuplicatePasswordNameError;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Ramsey\Uuid\Uuid as RamseyUuid;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -43,8 +45,12 @@ class CreatePasswordController extends AbstractController
 
         $password = new Password(RamseyUuid::uuid4()->toString(), $name, $generatedPassword, $this->getUser()->getId());
 
-        $this->entityManager->persist($password);
-        $this->entityManager->flush();
+        try {
+            $this->entityManager->persist($password);
+            $this->entityManager->flush();
+        } catch (UniqueConstraintViolationException $e) {
+            throw new DuplicatePasswordNameError($password->getName());
+        }
 
         return $this->json($password);
     }
