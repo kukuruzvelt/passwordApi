@@ -28,6 +28,7 @@ class GetPasswordsController extends AbstractController
         $data = [];
         foreach ($passwords as $password) {
             $data[] = [
+                'id' => $password->getId(),
                 'name' => $password->getName(),
                 'value' => $password->getPasswordValue(),
             ];

@@ -39,7 +39,7 @@ class CreatePasswordController extends AbstractController
         $generatedPassword = match ($algorithm) {
             'random' => $this->generateRandomPassword($length, $includeUppercase, $includeLowercase, $includeNumbers, $includeSpecialChars),
             'pronounceable' => $this->generatePronounceablePassword($length),
-            'passphrase' => $this->generatePassphrase($length),
+            'numbers' => $this->generateNumPassword($length),
             default => throw new \InvalidArgumentException('Invalid algorithm specified.'),
         };
 
@@ -92,21 +92,14 @@ class CreatePasswordController extends AbstractController
         return $password;
     }
 
-    private function generatePassphrase(): string
+    private function generateNumPassword($length): string
     {
-        $wordList = array('apple', 'banana', 'orange', 'grape', 'kiwi', 'melon', 'pear', 'peach');
-        $separator = '-';
-        $passphrase = '';
+        $password = '';
 
-        for ($i = 0; $i < 4; $i++) {
-            $index = rand(0, count($wordList) - 1);
-            $passphrase .= $wordList[$index];
-
-            if ($i < 4 - 1) {
-                $passphrase .= $separator;
-            }
+        for ($i = 0; $i < $length; $i++) {
+            $password .= random_int(0, 9);
         }
 
-        return $passphrase;
+        return $password;
     }
 }
