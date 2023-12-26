@@ -23,7 +23,8 @@ class GetPasswordsController extends AbstractController
     {
         $userId = $this->getUser()->getId();
 
-        $passwords = $this->entityManager->getRepository(Password::class)->findBy(['userId' => $userId]);
+        $passwords = $this->entityManager->getRepository(Password::class)
+            ->findBy(['userId' => $userId], ['name' => 'ASC']);
 
         $data = [];
         foreach ($passwords as $password) {
