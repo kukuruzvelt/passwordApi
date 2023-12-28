@@ -17,9 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class CreatePasswordController extends AbstractController
 {
     public function __construct(private EntityManagerInterface $entityManager)
-    {
-
-    }
+    {}
 
     #[Route('/api/create-password', methods: ['POST'])]
     public function __invoke(Request $request): JsonResponse
@@ -35,10 +33,9 @@ class CreatePasswordController extends AbstractController
         $includeNumbers = $requestData['includeNumbers'] ?? true;
         $includeSpecialChars = $requestData['includeSpecialChars'] ?? true;
 
-        // Perform password generation based on the selected algorithm
         $generatedPassword = match ($algorithm) {
             'random' => $this->generateRandomPassword($length, $includeUppercase, $includeLowercase, $includeNumbers, $includeSpecialChars),
-            'pronounceable' => $this->generatePronounceablePassword($length),
+            'pronounceable' => $this->generatePronounceablePassword($length, $includeUppercase, $includeLowercase),
             'numbers' => $this->generateNumPassword($length),
             default => throw new \InvalidArgumentException('Invalid algorithm specified.'),
         };
@@ -72,7 +69,7 @@ class CreatePasswordController extends AbstractController
         return $password;
     }
 
-    private function generatePronounceablePassword(int $length): string
+    private function generatePronounceablePassword(int $length, bool $includeUppercase, bool $includeLowercase): string
     {
         $vowels = array('a', 'e', 'i', 'o', 'u');
         $consonants = array('b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z');
@@ -82,11 +79,17 @@ class CreatePasswordController extends AbstractController
         $consonantCount = count($consonants);
 
         for ($i = 0; $i < $length; $i++) {
-            if ($i % 2 == 0) {
-                $password .= $consonants[rand(0, $consonantCount - 1)];
-            } else {
-                $password .= $vowels[rand(0, $vowelCount - 1)];
+            $sourceArray = ($i % 2 == 0) ? $consonants : $vowels;
+
+            $char = $sourceArray[rand(0, count($sourceArray) - 1)];
+
+            if ($includeUppercase && $includeLowercase) {
+                $char = (rand(0, 1) == 0) ? strtoupper($char) : $char;
+            } elseif ($includeUppercase) {
+                $char = strtoupper($char);
             }
+
+            $password .= $char;
         }
 
         return $password;
