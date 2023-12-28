@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y \
 RUN docker-php-ext-configure zip && docker-php-ext-install zip pdo pdo_mysql gd
 
 # Set the working directory in the container
-WORKDIR /var/www/html
+WORKDIR /srv/app
 
 # Install Composer globally
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
