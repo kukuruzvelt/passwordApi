@@ -1,5 +1,5 @@
 resources:
-  App\CompanySubdomain\SomeModule\Domain\Entity\Test:
+  App\CompanySubdomain\SomeModule\Domain\Password:
     operations:
 
       getPasswords:

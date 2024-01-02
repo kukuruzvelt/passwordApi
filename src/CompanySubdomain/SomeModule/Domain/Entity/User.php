@@ -2,7 +2,6 @@
 
 namespace App\CompanySubdomain\SomeModule\Domain\Entity;
 
-use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use App\CompanySubdomain\SomeModule\Infrastructure\RegisterProcessor;
 use Doctrine\ORM\Mapping as ORM;
@@ -13,7 +12,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
 #[Post(uriTemplate: 'register', normalizationContext: ['groups' => 'output'], input: UserInputDto::class, processor: RegisterProcessor::class)]
-
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     public function __construct(
