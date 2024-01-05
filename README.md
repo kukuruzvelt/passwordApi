@@ -12,7 +12,7 @@ Before you begin, ensure that you have the following:
 1. Clone your project repository to your local machine.
 
 ```
-    git clone https://github.com/kukuruzvelt/Test_task_junior_php](https://github.com/kukuruzvelt/passwordApi
+    git clone https://github.com/kukuruzvelt/passwordApi
    
     cd passwordApi
 ```
